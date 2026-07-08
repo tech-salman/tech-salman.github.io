@@ -13,17 +13,9 @@
         <h1>MUHAMMAD SALMAN NADEEM</h1>
         <p>Web/App Developer • Cybersecurity • Cloud</p>
         <div class="quick-nav">
-          <label for="section-jump">Quick Jump</label>
-          <select id="section-jump" class="section-dropdown">
-            <option value="">Select section</option>
-            <option value="skills">Skills</option>
-            <option value="professional-summary">Professional Summary</option>
-            <option value="experience">Experience</option>
-            <option value="projects">Projects</option>
-            <option value="education">Education</option>
-            <option value="social-links">Social Links</option>
-            <option value="about">About</option>
-          </select>
+          <a class="download-btn" href="/Muhammad_Salman_Nadeem_CV.pdf" download
+            >Download CV (PDF)</a
+          >
           <div class="scroll-buttons">
             <a class="scroll-btn" href="#professional-summary">Summary</a>
             <a class="scroll-btn" href="#experience">Experience</a>
@@ -225,15 +217,5 @@
         </section>
       </section>
     </main>
-    <script>
-      const sectionJump = document.getElementById("section-jump");
-      sectionJump?.addEventListener("change", (event) => {
-        const id = event.target.value;
-        if (!id) return;
-        const target = document.getElementById(id);
-        if (!target) return;
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
-      });
-    </script>
   </body>
 </html>

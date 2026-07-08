@@ -79,22 +79,30 @@ body {
 
 .quick-nav {
   margin-top: 12px;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 10px;
 }
 
-.quick-nav label {
-  font-weight: 600;
+.download-btn {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(176, 208, 255, 0.75);
+  background: linear-gradient(140deg, rgba(89, 115, 255, 0.45), rgba(39, 198, 255, 0.45));
+  color: #f4f8ff;
   font-size: 0.9rem;
+  font-weight: 600;
+  transition: transform 0.15s ease, background 0.15s ease;
 }
 
-.section-dropdown {
-  width: min(100%, 360px);
-  padding: 9px 10px;
-  border-radius: 8px;
-  border: 1px solid rgba(186, 199, 255, 0.55);
-  background: #0f1857;
-  color: #eef4ff;
+.download-btn:hover {
+  text-decoration: none;
+  background: linear-gradient(140deg, rgba(98, 126, 255, 0.6), rgba(44, 204, 255, 0.6));
+  transform: translateY(-1px);
 }
 
 .scroll-buttons {
@@ -308,10 +316,6 @@ a:hover {
 
   .top-banner p {
     font-size: 0.9rem;
-  }
-
-  .section-dropdown {
-    width: 100%;
   }
 
   .panel {
