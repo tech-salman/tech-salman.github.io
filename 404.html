@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 - Page Not Found | ezoi.me</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .error-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: var(--bg);
+      color: var(--text);
+      padding: 20px;
+    }
+    .error-code {
+      font-size: 9rem;
+      font-weight: bold;
+      background: linear-gradient(90deg, #6f7bff, #20d7ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 0;
+      line-height: 1;
+    }
+    .error-message {
+      font-size: 1.8rem;
+      margin: 20px 0 40px;
+      color: var(--muted);
+    }
+    .return-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 40px;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: white;
+      background: linear-gradient(140deg, #6f7bff, #20d7ff);
+      border: none;
+      border-radius: 50px;
+      text-decoration: none;
+      box-shadow: 0 10px 30px rgba(111, 123, 255, 0.4);
+      transition: all 0.3s ease;
+    }
+    .return-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(111, 123, 255, 0.5);
+    }
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      opacity: 0.15;
+      background-image: 
+        linear-gradient(to right, rgba(140, 161, 255, 0.2) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(140, 161, 255, 0.2) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: -1;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid"></div>
+  
+  <div class="error-page">
+    <h1 class="error-code">404</h1>
+    <p class="error-message">Oops! The page you're looking for doesn't exist.</p>
+    
+    <a href="/" class="return-btn">
+      ← Return to ezoi.me
+    </a>
+  </div>
+</body>
+</html>
