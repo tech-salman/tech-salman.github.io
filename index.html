@@ -395,10 +395,9 @@
     <h2>Welcome to My Portfolio!</h2>
     <p>Enter your name to be featured in the Visitors list.</p>
     
-    <form id="visitor-form" action="https://formspree.io/f/mdaqzzwk" method="POST">
-      <input type="text" name="name" id="visitor-name" placeholder="Your Full Name" required />
-      <input type="email" name="email" id="visitor-email" placeholder="Your Email" required />
-      <input type="hidden" name="_subject" value="New Portfolio Visitor!" />
+    <form id="visitor-form">
+      <input type="text" id="visitor-name" placeholder="Your Full Name" required />
+      <input type="email" id="visitor-email" placeholder="Your Email" required />
       <button type="submit">Join Visitors List</button>
       <button type="button" onclick="skipVisitor()" class="skip-btn">Skip for now</button>
     </form>
@@ -446,11 +445,30 @@ if (!localStorage.getItem('visitorSubmitted')) {
   document.getElementById('visitor-popup').style.display = 'flex';
 }
 
-document.getElementById('visitor-form').addEventListener('submit', () => {
-  localStorage.setItem('visitorSubmitted', 'true');
-  setTimeout(() => {
+document.getElementById('visitor-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const name = document.getElementById('visitor-name').value.trim();
+  const email = document.getElementById('visitor-email').value.trim();
+
+  if (name && email) {
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('email', email);
+
+    try {
+      await fetch('https://script.google.com/macros/s/AKfycbxG9vwkjZ_Rc8ZpBp2nYdh3i6WCuNs8Ix7LcaM6eHfH-QX4T-vEt1QtsHRMTE9Ly4aA/exec', {
+        method: 'POST',
+        body: formData
+      });
+    } catch (err) {
+      console.log("Data saved to sheet");
+    }
+
+    localStorage.setItem('visitorSubmitted', 'true');
     document.getElementById('visitor-popup').style.display = 'none';
-  }, 800);
+    alert('Thank you! You are now in the Visitors List ✨');
+  }
 });
 
 function skipVisitor() {
