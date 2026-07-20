@@ -395,9 +395,10 @@
     <h2>Welcome to My Portfolio!</h2>
     <p>Enter your name to be featured in the Visitors list.</p>
     
-    <form id="visitor-form">
-      <input type="text" id="visitor-name" placeholder="Your Full Name" required />
-      <input type="email" id="visitor-email" placeholder="Your Email" required />
+    <form id="visitor-form" action="https://formspree.io/f/mdaqzzwk" method="POST">
+      <input type="text" name="name" id="visitor-name" placeholder="Your Full Name" required />
+      <input type="email" name="email" id="visitor-email" placeholder="Your Email" required />
+      <input type="hidden" name="_subject" value="New Portfolio Visitor!" />
       <button type="submit">Join Visitors List</button>
       <button type="button" onclick="skipVisitor()" class="skip-btn">Skip</button>
     </form>
