@@ -400,9 +400,63 @@
       <input type="email" name="email" id="visitor-email" placeholder="Your Email" required />
       <input type="hidden" name="_subject" value="New Portfolio Visitor!" />
       <button type="submit">Join Visitors List</button>
-      <button type="button" onclick="skipVisitor()" class="skip-btn">Skip</button>
+      <button type="button" onclick="skipVisitor()" class="skip-btn">Skip for now</button>
     </form>
   </div>
 </div>
+
+<style>
+.popup-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(6, 8, 20, 0.95);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000;
+}
+.popup-content {
+  background: var(--surface-strong);
+  padding: 40px 30px;
+  border-radius: 18px;
+  border: 1px solid #6f7bff;
+  max-width: 420px;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(111, 123, 255, 0.4);
+}
+.popup-content input {
+  width: 100%; padding: 14px; margin: 12px 0;
+  border-radius: 8px; border: 1px solid #6f7bff;
+  background: rgba(255,255,255,0.08); color: white;
+  font-size: 1rem;
+}
+.popup-content button {
+  margin: 12px 8px; padding: 14px 32px;
+  border: none; border-radius: 50px; font-weight: 600; cursor: pointer;
+}
+.popup-content button[type="submit"] {
+  background: linear-gradient(140deg, #6f7bff, #20d7ff);
+  color: white;
+}
+.skip-btn {
+  background: transparent; border: 1px solid #a8b6df; color: #a8b6df;
+}
+</style>
+
+<script>
+// Show popup only once
+if (!localStorage.getItem('visitorSubmitted')) {
+  document.getElementById('visitor-popup').style.display = 'flex';
+}
+
+document.getElementById('visitor-form').addEventListener('submit', () => {
+  localStorage.setItem('visitorSubmitted', 'true');
+  setTimeout(() => {
+    document.getElementById('visitor-popup').style.display = 'none';
+  }, 800);
+});
+
+function skipVisitor() {
+  localStorage.setItem('visitorSubmitted', 'true');
+  document.getElementById('visitor-popup').style.display = 'none';
+}
+</script>
   </body>
 </html>
