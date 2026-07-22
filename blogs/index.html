@@ -6,38 +6,67 @@
   <title>Blogs - Muhammad Salman Nadeem</title>
   <link rel="stylesheet" href="/styles.css" />
   <style>
-    .coming-soon {
+    .blogs-page { 
+      min-height: 100vh; 
+      padding: 40px 20px; 
+      background: var(--bg); 
+      color: var(--text); 
+    }
+    .container { 
+      max-width: 1100px; 
+      margin: 0 auto; 
+    }
+    .header { 
+      text-align: center; 
+      margin-bottom: 60px; 
+    }
+    .header h1 {
+      font-size: clamp(2rem, 6vw, 3rem);
+      background: linear-gradient(90deg, #6f7bff, #20d7ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .blogs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .blog-card {
+      background: var(--surface-strong);
+      border: 1px solid rgba(111, 123, 255, 0.3);
+      border-radius: 16px;
+      padding: 40px 24px;
       text-align: center;
-      padding: 100px 20px;
-      min-height: 80vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 20px;
+      transition: all 0.4s ease;
     }
-    .coming-soon h1 {
-      font-size: clamp(2rem, 6vw, 2.8rem);
-      color: #6f7bff;
+    .blog-card:hover {
+      transform: translateY(-12px) scale(1.03);
+      border-color: #20d7ff;
     }
-    .back-home-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 14px 32px;
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: white;
+    .blog-icon {
+      font-size: 3.5rem;
+      margin-bottom: 16px;
+    }
+    .blog-name { 
+      font-size: 1.8rem; 
+      font-weight: 700; 
+      margin: 16px 0 12px; 
+    }
+    .blog-btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 14px 36px;
       background: linear-gradient(140deg, #6f7bff, #20d7ff);
-      border: none;
+      color: white;
       border-radius: 50px;
       text-decoration: none;
-      box-shadow: 0 8px 25px rgba(111, 123, 255, 0.4);
+      font-weight: 600;
+      box-shadow: 0 6px 20px rgba(111, 123, 255, 0.4);
       transition: all 0.3s ease;
     }
-    .back-home-btn:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 35px rgba(111, 123, 255, 0.5);
+    .blog-btn:hover { 
+      transform: scale(1.08); 
+      box-shadow: 0 12px 30px rgba(32, 215, 255, 0.5); 
     }
   </style>
 </head>
@@ -51,15 +80,39 @@
     <nav class="sidebar-nav" aria-label="Sidebar">
       <a href="/">Home</a>
       <a href="/pages/">WebPages</a>
+      <a href="/blogs/">Blogs</a>
       <a href="/tools">Tools</a>
       <a href="/hidden">Hidden</a>
     </nav>
   </aside>
 
-  <div class="coming-soon">
-    <h1>📝 Blogs</h1>
-    <p><strong>Blogs are getting ready and will be uploaded soon!</strong></p>
-    <a href="/" class="back-home-btn">← Return to ezoi.me</a>
+  <div class="blogs-page">
+    <div class="container">
+      <div class="header">
+        <h1>📝 My Blogs</h1>
+        <p style="color: var(--muted); font-size: 1.1rem;">Thoughts, Articles & Tech Tricks</p>
+      </div>
+
+      <div class="blogs-grid">
+        <div class="blog-card">
+          <div class="blog-icon">✍️</div>
+          <h2 class="blog-name">Articles</h2>
+          <p style="color: var(--muted);">In-depth writings and tutorials</p>
+          <a href="/blogs/articles/" class="blog-btn">Explore Articles →</a>
+        </div>
+
+        <div class="blog-card">
+          <div class="blog-icon">🛠️</div>
+          <h2 class="blog-name">Tricks</h2>
+          <p style="color: var(--muted);">Quick tips, hacks & productivity tricks</p>
+          <a href="/blogs/tricks/" class="blog-btn">Explore Tricks →</a>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 60px;">
+        <a href="/" style="color: #8fdbff; text-decoration: underline;">← Back to Main Portfolio</a>
+      </div>
+    </div>
   </div>
 
   <script>
