@@ -79,6 +79,44 @@
       font-size: 0.9rem;
     }
 
+    .chat-controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+
+    .control {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 180px;
+      flex: 1 1 220px;
+    }
+
+    .control label {
+      font-size: 0.78rem;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: #a8bee9;
+    }
+
+    .control select {
+      border-radius: 10px;
+      border: 1px solid rgba(163, 185, 255, 0.55);
+      background: rgba(10, 16, 36, 0.86);
+      color: var(--text);
+      padding: 10px 11px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .control select:focus {
+      border-color: #20d7ff;
+      box-shadow: 0 0 0 2px rgba(32, 215, 255, 0.2);
+    }
+
     .chat-window {
       height: min(65vh, 620px);
       overflow-y: auto;
@@ -115,6 +153,8 @@
       background: rgba(32, 215, 255, 0.12);
       border-color: rgba(32, 215, 255, 0.45);
       color: #e9f8ff;
+      max-width: 95%;
+      width: min(100%, 820px);
     }
 
     .msg.system {
@@ -212,6 +252,72 @@
       background: rgba(255, 255, 255, 0.14);
     }
 
+    .assistant-card {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .assistant-body p {
+      margin: 0 0 10px;
+      line-height: 1.65;
+    }
+
+    .assistant-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .assistant-actions {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .copy-btn {
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(180, 225, 255, 0.55);
+      background: rgba(255, 255, 255, 0.08);
+      color: #dff3ff;
+      font-size: 0.78rem;
+      cursor: pointer;
+    }
+
+    .copy-btn:hover {
+      background: rgba(255, 255, 255, 0.16);
+    }
+
+    .references {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .references-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #9ddaff;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .reference-box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(117, 199, 255, 0.45);
+      background: rgba(23, 42, 68, 0.46);
+      padding: 8px 10px;
+    }
+
+    .reference-box span {
+      font-size: 0.88rem;
+      line-height: 1.4;
+      color: #e8f7ff;
+      word-break: break-word;
+    }
+
     @media (max-width: 700px) {
       .islamai-page { padding: 22px 12px; }
       .composer { grid-template-columns: 1fr; }
@@ -244,6 +350,46 @@
       <section class="chat-shell" aria-label="Islam AI Chatbot">
         <div class="chat-meta">
           <span id="statusText">Status: Ready</span>
+          <div class="chat-controls">
+            <div class="control">
+              <label for="lengthSelect">Response length</label>
+              <select id="lengthSelect">
+                <option value="short">Short</option>
+                <option value="medium" selected>Medium</option>
+                <option value="extended">Extended</option>
+              </select>
+            </div>
+            <div class="control">
+              <label for="languageSelect">Preferred language</label>
+              <select id="languageSelect">
+                <option value="english" selected>English</option>
+                <option value="urdu">Urdu</option>
+                <option value="roman urdu">Roman Urdu</option>
+              </select>
+            </div>
+            <div class="control">
+              <label for="resourceSelect">Knowledge resource</label>
+              <select id="resourceSelect">
+                <option value="full" selected>Full (all resources)</option>
+                <option value="quran">Quran Verses — 6,236 — /quran/:key</option>
+                <option value="hadith">Hadith (7 collections) — 36,390 — /hadith/:key</option>
+                <option value="tafsir">Tafsir Ibn Kathir — ~6,000 — /tafsir/:key</option>
+                <option value="rijal">Rijal Narrators — 18,298 — /rijal</option>
+                <option value="tawhid">Kitab At-Tawhid — 66 — /tawhid</option>
+                <option value="aqidah">Aqidah Salaf — 60 — /aqidah</option>
+                <option value="amalan">Amalan Sunnah — 97 — /amalan</option>
+                <option value="nawawi">Hadith Nawawi — 42 — /nawawi</option>
+                <option value="doa">Doa Harian — 50 — /doa</option>
+                <option value="asmaul-husna">Asmaul Husna — 99 — /asmaul-husna</option>
+                <option value="figures">Islamic Figures — 26 — /figures</option>
+                <option value="maudhu">Hadith Maudhu — 15 — /maudhu</option>
+                <option value="mosque">Masjid Salaf — dynamic — /mosque</option>
+                <option value="school">Sekolah Salaf — dynamic — /school</option>
+                <option value="lecture">Kajian Salaf — dynamic — /lecture</option>
+                <option value="lecture-webhook">Lecture Webhook — POST — /lecture/webhook</option>
+              </select>
+            </div>
+          </div>
         </div>
 
         <div id="chatWindow" class="chat-window" aria-live="polite"></div>
@@ -301,16 +447,126 @@
     const clearBtn = document.getElementById('clearBtn');
     const typingEl = document.getElementById('typing');
     const statusText = document.getElementById('statusText');
+    const lengthSelect = document.getElementById('lengthSelect');
+    const languageSelect = document.getElementById('languageSelect');
+    const resourceSelect = document.getElementById('resourceSelect');
 
     let isSending = false;
     let chatHistory = [];
 
     const WELCOME = 'Assalamu Alaikum! I am Islam AI. Ask me about Quran, Hadith, Fiqh, Seerah, duas, and Islamic knowledge.';
 
+    const RESOURCE_HINTS = {
+      full: 'all available Islamic resources',
+      quran: 'Quran verses collection (/quran/:key)',
+      hadith: 'Hadith collections (/hadith/:key)',
+      tafsir: 'Tafsir Ibn Kathir (/tafsir/:key)',
+      rijal: 'Rijal Narrators (/rijal)',
+      tawhid: 'Kitab At-Tawhid (/tawhid)',
+      aqidah: 'Aqidah Salaf (/aqidah)',
+      amalan: 'Amalan Sunnah (/amalan)',
+      nawawi: 'Hadith Nawawi (/nawawi)',
+      doa: 'Doa Harian (/doa)',
+      'asmaul-husna': 'Asmaul Husna (/asmaul-husna)',
+      figures: 'Islamic Figures (/figures)',
+      maudhu: 'Hadith Maudhu (/maudhu)',
+      mosque: 'Masjid Salaf directory (/mosque)',
+      school: 'Sekolah Salaf directory (/school)',
+      lecture: 'Kajian Salaf (/lecture)',
+      'lecture-webhook': 'lecture webhook details (/lecture/webhook)'
+    };
+
+    function copyText(text) {
+      if (!text) return;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).catch(() => {});
+        return;
+      }
+      const area = document.createElement('textarea');
+      area.value = text;
+      area.setAttribute('readonly', '');
+      area.style.position = 'absolute';
+      area.style.left = '-9999px';
+      document.body.appendChild(area);
+      area.select();
+      document.execCommand('copy');
+      area.remove();
+    }
+
+    function extractReferences(text) {
+      if (!text) return { body: '', refs: [] };
+
+      const normalized = String(text).replace(/\r\n/g, '\n').trim();
+      const split = normalized.split(/\n+(?:\*\*)?(?:references|sources|refs?)(?:\*\*)?\s*:?\n+/i);
+      if (split.length > 1) {
+        const body = split[0].trim();
+        const refLines = split.slice(1).join('\n').split('\n').map((line) => line.replace(/^[\-\*\d\.\)\s]+/, '').trim()).filter(Boolean);
+        return { body, refs: refLines };
+      }
+      return { body: normalized, refs: [] };
+    }
+
+    function renderAssistantMessage(wrapper, text) {
+      const { body, refs } = extractReferences(text);
+      const card = document.createElement('div');
+      card.className = 'assistant-card';
+
+      const bodyEl = document.createElement('div');
+      bodyEl.className = 'assistant-body';
+      body.split(/\n{2,}/).filter(Boolean).forEach((paragraph) => {
+        const p = document.createElement('p');
+        p.textContent = paragraph.trim();
+        bodyEl.appendChild(p);
+      });
+      card.appendChild(bodyEl);
+
+      if (refs.length) {
+        const refsWrap = document.createElement('div');
+        refsWrap.className = 'references';
+        const title = document.createElement('div');
+        title.className = 'references-title';
+        title.textContent = 'References';
+        refsWrap.appendChild(title);
+
+        refs.forEach((refText) => {
+          const box = document.createElement('div');
+          box.className = 'reference-box';
+          const span = document.createElement('span');
+          span.textContent = refText;
+          const copyBtn = document.createElement('button');
+          copyBtn.className = 'copy-btn';
+          copyBtn.type = 'button';
+          copyBtn.textContent = 'Copy';
+          copyBtn.addEventListener('click', () => copyText(refText));
+          box.appendChild(span);
+          box.appendChild(copyBtn);
+          refsWrap.appendChild(box);
+        });
+
+        card.appendChild(refsWrap);
+      }
+
+      const actions = document.createElement('div');
+      actions.className = 'assistant-actions';
+      const copyAllBtn = document.createElement('button');
+      copyAllBtn.className = 'copy-btn';
+      copyAllBtn.type = 'button';
+      copyAllBtn.textContent = 'Copy answer';
+      copyAllBtn.addEventListener('click', () => copyText(text));
+      actions.appendChild(copyAllBtn);
+      card.appendChild(actions);
+
+      wrapper.appendChild(card);
+    }
+
     function addMessage(role, text) {
       const div = document.createElement('div');
       div.className = `msg ${role}`;
-      div.textContent = text;
+      if (role === 'bot') {
+        renderAssistantMessage(div, text);
+      } else {
+        div.textContent = text;
+      }
       chatWindow.appendChild(div);
       chatWindow.scrollTop = chatWindow.scrollHeight;
     }
@@ -323,6 +579,9 @@
       isSending = sending;
       sendBtn.disabled = sending;
       messageInput.disabled = sending;
+      lengthSelect.disabled = sending;
+      languageSelect.disabled = sending;
+      resourceSelect.disabled = sending;
       statusText.textContent = sending ? 'Status: Thinking…' : 'Status: Ready';
       setTyping(sending);
     }
@@ -353,9 +612,25 @@
     }
 
     async function queryIslamAI(userText) {
+      const responseLength = lengthSelect.value || 'medium';
+      const preferredLanguage = languageSelect.value || 'english';
+      const selectedResource = resourceSelect.value || 'full';
+      const selectedResourceHint = RESOURCE_HINTS[selectedResource] || RESOURCE_HINTS.full;
+
+      const styleInstruction = [
+        `Respond in ${preferredLanguage}.`,
+        `Keep the answer ${responseLength}.`,
+        'Write in a smooth, polished, natural tone similar to top conversational assistants.',
+        `Use ${selectedResourceHint} only unless the user asks to broaden scope.`,
+        'If citing evidence, add a "References:" section at the end and list each reference on a new line.'
+      ].join(' ');
+
       const payload = {
-        message: userText,
+        message: `${userText}\n\nStyle instructions: ${styleInstruction}`,
         history: chatHistory,
+        response_length: responseLength,
+        preferred_language: preferredLanguage,
+        resource_scope: selectedResource
       };
 
       const candidatePaths = [
