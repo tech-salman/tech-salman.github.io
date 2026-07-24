@@ -3,6 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="description"
+    content="Islam AI by Muhammad Salman Nadeem: ask questions about Quran, Hadith, Fiqh, Seerah, and Islamic knowledge."
+  />
+  <meta
+    name="keywords"
+    content="Islam AI, Islamic chatbot, Quran questions, Hadith questions, Fiqh assistant, Seerah AI"
+  />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <link rel="canonical" href="https://ezoi.me/islamAI/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Islam AI - Muhammad Salman Nadeem" />
+  <meta
+    property="og:description"
+    content="Ask Islamic questions and get guidance powered by an Islamic knowledge API."
+  />
+  <meta property="og:url" content="https://ezoi.me/islamAI/" />
+  <meta property="og:site_name" content="Muhammad Salman Nadeem Portfolio" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Islam AI - Muhammad Salman Nadeem" />
+  <meta
+    name="twitter:description"
+    content="Ask Islamic questions and get guidance powered by an Islamic knowledge API."
+  />
   <title>Islam AI - Muhammad Salman Nadeem</title>
   <link rel="stylesheet" href="../styles.css" />
   <style>
@@ -272,7 +296,7 @@
 
     // Chatbot logic
     const API_BASE = 'https://sunnah.amanahagent.cloud/api/v1';
-    const API_KEY = 'sk_sunnah_a54952bd9b1a90810d6029fe7794008410008c6e46f2d835';
+    const API_KEY = window.ISLAM_AI_API_KEY || '';
 
     const chatWindow = document.getElementById('chatWindow');
     const messageInput = document.getElementById('messageInput');
@@ -348,13 +372,18 @@
 
       for (const path of candidatePaths) {
         try {
+          const headers = {
+            'Content-Type': 'application/json'
+          };
+
+          if (API_KEY) {
+            headers.Authorization = 'Bearer ' + API_KEY;
+            headers['x-api-key'] = API_KEY;
+          }
+
           const res = await fetch(API_BASE + path, {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${API_KEY}`,
-              'x-api-key': API_KEY
-            },
+            headers,
             body: JSON.stringify(payload)
           });
 
@@ -363,8 +392,18 @@
             throw new Error(`HTTP ${res.status} on ${path}${txt ? `: ${txt.slice(0, 180)}` : ''}`);
           }
 
-          const json = await res.json().catch(() => null);
-          const answer = normalizeResponse(json);
+          const textBody = await res.text();
+          let answer = textBody;
+
+          if (textBody) {
+            try {
+              const json = JSON.parse(textBody);
+              answer = normalizeResponse(json) || textBody;
+            } catch {
+              answer = textBody;
+            }
+          }
+
           if (!answer) {
             throw new Error(`No readable answer field returned from ${path}`);
           }
