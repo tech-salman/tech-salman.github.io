@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Islam AI - Muhammad Salman Nadeem</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    .islamai-page {
+      min-height: 100vh;
+      padding: 40px 20px;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .header h1 {
+      font-size: clamp(2rem, 6vw, 3rem);
+      background: linear-gradient(90deg, #6f7bff, #20d7ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      color: var(--muted);
+      font-size: 1.05rem;
+      margin: 0;
+    }
+
+    .chat-shell {
+      background: var(--surface-strong);
+      border: 1px solid rgba(111, 123, 255, 0.35);
+      border-radius: 16px;
+      padding: 14px;
+      box-shadow: 0 10px 30px rgba(6, 10, 28, 0.55);
+    }
+
+    .chat-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .chat-window {
+      height: min(65vh, 620px);
+      overflow-y: auto;
+      background: rgba(7, 12, 30, 0.75);
+      border: 1px solid rgba(117, 141, 255, 0.28);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      scroll-behavior: smooth;
+    }
+
+    .msg {
+      max-width: 82%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      line-height: 1.5;
+      font-size: 0.95rem;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      border: 1px solid transparent;
+    }
+
+    .msg.user {
+      align-self: flex-end;
+      background: rgba(111, 123, 255, 0.22);
+      border-color: rgba(111, 123, 255, 0.55);
+      color: #eef2ff;
+    }
+
+    .msg.bot {
+      align-self: flex-start;
+      background: rgba(32, 215, 255, 0.12);
+      border-color: rgba(32, 215, 255, 0.45);
+      color: #e9f8ff;
+    }
+
+    .msg.system {
+      align-self: center;
+      max-width: 95%;
+      background: rgba(255, 193, 7, 0.12);
+      border-color: rgba(255, 193, 7, 0.35);
+      color: #ffe9a9;
+      font-size: 0.88rem;
+      text-align: center;
+    }
+
+    .typing {
+      display: none;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      padding-left: 4px;
+    }
+
+    .typing.active {
+      display: block;
+    }
+
+    .composer {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+    }
+
+    .composer textarea {
+      width: 100%;
+      min-height: 56px;
+      max-height: 160px;
+      resize: vertical;
+      border-radius: 12px;
+      border: 1px solid rgba(163, 185, 255, 0.55);
+      background: rgba(10, 16, 36, 0.86);
+      color: var(--text);
+      padding: 12px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .composer textarea:focus {
+      border-color: #20d7ff;
+      box-shadow: 0 0 0 2px rgba(32, 215, 255, 0.2);
+    }
+
+    .send-btn {
+      align-self: end;
+      height: 56px;
+      padding: 0 22px;
+      border-radius: 12px;
+      border: 1px solid rgba(176, 208, 255, 0.75);
+      background: linear-gradient(140deg, rgba(89, 115, 255, 0.55), rgba(39, 198, 255, 0.55));
+      color: #f4f8ff;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    .send-btn:hover {
+      transform: translateY(-1px);
+      background: linear-gradient(140deg, rgba(98, 126, 255, 0.7), rgba(44, 204, 255, 0.7));
+    }
+
+    .send-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .actions {
+      margin-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .chip-btn {
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(163, 185, 255, 0.55);
+      background: rgba(255, 255, 255, 0.08);
+      color: #e8f0ff;
+      font-size: 0.86rem;
+      cursor: pointer;
+    }
+
+    .chip-btn:hover {
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    @media (max-width: 700px) {
+      .islamai-page { padding: 22px 12px; }
+      .composer { grid-template-columns: 1fr; }
+      .send-btn { width: 100%; }
+      .msg { max-width: 95%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+
+  <button class="menu-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="sidebar-menu">☰</button>
+  <div class="menu-overlay" hidden></div>
+
+  <aside class="sidebar-menu" id="sidebar-menu" aria-hidden="true">
+    <nav class="sidebar-nav" aria-label="Sidebar">
+      <a href="/">Home</a>
+      <a href="/blogs/">Blogs</a>
+      <a href="/pages/">Web Pages</a>
+      <a href="/tools/">Tools</a>
+      <a href="/islamAI/">Islam AI</a>
+    </nav>
+  </aside>
+
+  <div class="islamai-page">
+    <div class="container">
+      <div class="header">
+        <h1>🕌 Islam AI</h1>
+        <p>Ask Islamic questions and get instant guidance powered by Islamic Knowledge API.</p>
+      </div>
+
+      <section class="chat-shell" aria-label="Islam AI Chatbot">
+        <div class="chat-meta">
+          <span>Endpoint: <strong>https://sunnah.amanahagent.cloud/api/v1</strong></span>
+          <span id="statusText">Status: Ready</span>
+        </div>
+
+        <div id="chatWindow" class="chat-window" aria-live="polite"></div>
+        <div id="typing" class="typing">Islam AI is typing...</div>
+
+        <div class="composer">
+          <textarea id="messageInput" placeholder="Ask anything about Islam... (Enter to send, Shift+Enter for new line)"></textarea>
+          <button id="sendBtn" class="send-btn" type="button">Send</button>
+        </div>
+
+        <div class="actions">
+          <button id="clearBtn" class="chip-btn" type="button">Clear Chat</button>
+          <a href="/" style="color:#8fdbff; text-decoration: underline; font-size: 0.9rem; align-self:center;">← Back to Main Portfolio</a>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    // Sidebar menu
+    const menuToggle = document.querySelector('.menu-toggle');
+    const sidebarMenu = document.getElementById('sidebar-menu');
+    const menuOverlay = document.querySelector('.menu-overlay');
+
+    const closeMenu = () => {
+      sidebarMenu.classList.remove('is-open');
+      menuOverlay.hidden = true;
+      menuToggle.setAttribute('aria-expanded', 'false');
+      sidebarMenu.setAttribute('aria-hidden', 'true');
+    };
+
+    const openMenu = () => {
+      sidebarMenu.classList.add('is-open');
+      menuOverlay.hidden = false;
+      menuToggle.setAttribute('aria-expanded', 'true');
+      sidebarMenu.setAttribute('aria-hidden', 'false');
+    };
+
+    menuToggle.addEventListener('click', () => {
+      sidebarMenu.classList.contains('is-open') ? closeMenu() : openMenu();
+    });
+
+    menuOverlay.addEventListener('click', closeMenu);
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && sidebarMenu.classList.contains('is-open')) closeMenu();
+    });
+
+    // Chatbot logic
+    const API_BASE = 'https://sunnah.amanahagent.cloud/api/v1';
+    const API_KEY = 'sk_sunnah_a54952bd9b1a90810d6029fe7794008410008c6e46f2d835';
+
+    const chatWindow = document.getElementById('chatWindow');
+    const messageInput = document.getElementById('messageInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const typingEl = document.getElementById('typing');
+    const statusText = document.getElementById('statusText');
+
+    let isSending = false;
+    let chatHistory = [];
+
+    const WELCOME = 'Assalamu Alaikum! I am Islam AI. Ask me about Quran, Hadith, Fiqh, Seerah, duas, and Islamic knowledge.';
+
+    function addMessage(role, text) {
+      const div = document.createElement('div');
+      div.className = `msg ${role}`;
+      div.textContent = text;
+      chatWindow.appendChild(div);
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    function setTyping(active) {
+      typingEl.classList.toggle('active', active);
+    }
+
+    function setSendingState(sending) {
+      isSending = sending;
+      sendBtn.disabled = sending;
+      messageInput.disabled = sending;
+      statusText.textContent = sending ? 'Status: Thinking…' : 'Status: Ready';
+      setTyping(sending);
+    }
+
+    function normalizeResponse(data) {
+      if (!data) return '';
+
+      if (typeof data === 'string') return data;
+
+      if (Array.isArray(data)) {
+        for (const item of data) {
+          const maybe = normalizeResponse(item);
+          if (maybe) return maybe;
+        }
+      }
+
+      return (
+        data.answer ||
+        data.response ||
+        data.reply ||
+        data.message ||
+        data.output ||
+        data.result ||
+        (data.data ? normalizeResponse(data.data) : '') ||
+        (data.choices && data.choices[0] && (data.choices[0].message?.content || data.choices[0].text)) ||
+        ''
+      );
+    }
+
+    async function queryIslamAI(userText) {
+      const payload = {
+        message: userText,
+        history: chatHistory,
+      };
+
+      const candidatePaths = [
+        '/islamAI/chat',
+        '/islamAI',
+        '/chat',
+        '/ask'
+      ];
+
+      let lastError = null;
+
+      for (const path of candidatePaths) {
+        try {
+          const res = await fetch(API_BASE + path, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${API_KEY}`,
+              'x-api-key': API_KEY
+            },
+            body: JSON.stringify(payload)
+          });
+
+          if (!res.ok) {
+            const txt = await res.text().catch(() => '');
+            throw new Error(`HTTP ${res.status} on ${path}${txt ? `: ${txt.slice(0, 180)}` : ''}`);
+          }
+
+          const json = await res.json().catch(() => null);
+          const answer = normalizeResponse(json);
+          if (!answer) {
+            throw new Error(`No readable answer field returned from ${path}`);
+          }
+
+          return answer;
+        } catch (err) {
+          lastError = err;
+        }
+      }
+
+      throw lastError || new Error('Unable to reach Islam AI endpoint.');
+    }
+
+    async function handleSend() {
+      const text = messageInput.value.trim();
+      if (!text || isSending) return;
+
+      addMessage('user', text);
+      chatHistory.push({ role: 'user', content: text });
+      messageInput.value = '';
+
+      setSendingState(true);
+
+      try {
+        const answer = await queryIslamAI(text);
+        addMessage('bot', answer);
+        chatHistory.push({ role: 'assistant', content: answer });
+      } catch (err) {
+        console.error(err);
+        const errMsg = 'Sorry, I could not fetch a response right now. Please try again in a moment.';
+        addMessage('system', errMsg);
+      } finally {
+        setSendingState(false);
+        messageInput.focus();
+      }
+    }
+
+    sendBtn.addEventListener('click', handleSend);
+
+    messageInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        handleSend();
+      }
+    });
+
+    clearBtn.addEventListener('click', () => {
+      chatWindow.innerHTML = '';
+      chatHistory = [];
+      addMessage('bot', WELCOME);
+      messageInput.focus();
+    });
+
+    // Init
+    addMessage('bot', WELCOME);
+    messageInput.focus();
+  </script>
+</body>
+</html>
