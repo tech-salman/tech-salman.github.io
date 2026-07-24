@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Tools by Muhammad Salman Nadeem. Utility pages and experiments for productivity and development." />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <link rel="canonical" href="https://ezoi.me/tools/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Tools - Muhammad Salman Nadeem" />
+  <meta property="og:description" content="Utility pages and experiments by Muhammad Salman Nadeem." />
+  <meta property="og:url" content="https://ezoi.me/tools/" />
+  <meta property="og:site_name" content="Muhammad Salman Nadeem Portfolio" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Tools - Muhammad Salman Nadeem" />
+  <meta name="twitter:description" content="Utility pages and experiments by Muhammad Salman Nadeem." />
+  <title>Tools - Muhammad Salman Nadeem</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    .tools-page { min-height: 100vh; padding: 40px 20px; background: var(--bg); color: var(--text); }
+    .container { max-width: 900px; margin: 0 auto; }
+    .header { text-align: center; margin-bottom: 36px; }
+    .header h1 {
+      font-size: clamp(2rem, 6vw, 3rem);
+      background: linear-gradient(90deg, #6f7bff, #20d7ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .panel {
+      background: var(--surface-strong);
+      border: 1px solid rgba(111, 123, 255, 0.35);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+
+  <button class="menu-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="sidebar-menu">☰</button>
+  <div class="menu-overlay" hidden></div>
+
+  <aside class="sidebar-menu" id="sidebar-menu" aria-hidden="true">
+    <nav class="sidebar-nav" aria-label="Sidebar">
+      <a href="/">Home</a>
+      <a href="/blogs/">Blogs</a>
+      <a href="/pages/">Web Pages</a>
+      <a href="/islamAI/">Islam AI</a>
+    </nav>
+  </aside>
+
+  <div class="tools-page">
+    <div class="container">
+      <div class="header">
+        <h1>🧰 Tools</h1>
+        <p style="color: var(--muted); font-size: 1.05rem;">Utility pages and experiments are being prepared.</p>
+      </div>
+
+      <section class="panel">
+        <p style="margin:0 0 16px;">More tools will be published here soon.</p>
+        <a href="/" style="color:#8fdbff; text-decoration: underline;">← Back to Main Portfolio</a>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const menuToggle = document.querySelector('.menu-toggle');
+    const sidebarMenu = document.getElementById('sidebar-menu');
+    const menuOverlay = document.querySelector('.menu-overlay');
+
+    const closeMenu = () => {
+      sidebarMenu.classList.remove('is-open');
+      menuOverlay.hidden = true;
+      menuToggle.setAttribute('aria-expanded', 'false');
+      sidebarMenu.setAttribute('aria-hidden', 'true');
+    };
+
+    const openMenu = () => {
+      sidebarMenu.classList.add('is-open');
+      menuOverlay.hidden = false;
+      menuToggle.setAttribute('aria-expanded', 'true');
+      sidebarMenu.setAttribute('aria-hidden', 'false');
+    };
+
+    menuToggle.addEventListener('click', () => {
+      sidebarMenu.classList.contains('is-open') ? closeMenu() : openMenu();
+    });
+
+    menuOverlay.addEventListener('click', closeMenu);
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && sidebarMenu.classList.contains('is-open')) closeMenu();
+    });
+  </script>
+</body>
+</html>
